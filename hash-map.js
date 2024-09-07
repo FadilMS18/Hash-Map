@@ -51,4 +51,32 @@ class HashMap {
       }
     }
   }
+
+  get(key){
+    let hashCode = hash(key, this.bucketSize)
+    let bucket = this.buckets[hashCode]
+    if(!bucket) return null // If bucket is empty then return null
+    else if(Helper.takeKey(bucket) == key) return bucket[key]; // If head key is equal to then return value
+    else{
+        while(bucket !== null){
+            bucket = bucket.next
+            if(Helper.takeKey(bucket) == key ) return bucket[key]
+        }
+    }
+    return null
+  }
+
+  has(key){
+    let hashCode = hash(key, this.bucketSize)
+    let bucket = this.buckets[hashCode]
+    if(!bucket) return false;
+    else if(Helper.takeKey(bucket) == key) return true
+    else{
+        while(bucket !== null ){
+            bucket = bucket.next
+            if(Helper.takeKey(bucket) == key) return true
+        }
+    }
+    return false
+  }
 }
