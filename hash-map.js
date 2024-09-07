@@ -1,4 +1,4 @@
-import { Helper, Node } from "./other";
+import { Helper, Node } from "./other.js";
 
 function hash(key, bucketSize) {
   let hashCode = 0;
@@ -14,7 +14,7 @@ class HashMap {
   static occupied = 0;
 
   constructor() {
-    this.buckets = new Array();
+    this.buckets = new Array(16);
   }
 
   isBucketEmpty(index) {
@@ -22,12 +22,13 @@ class HashMap {
     return false;
   }
 
-  bucketSize() {
+  get bucketSize() {
     return this.buckets.length;
   }
 
   expand() {
-    if (this.bucketSize * HashMap.loadFactor >= HashMap.occupied) {
+    let expandLength = this.bucketSize * HashMap.loadFactor;
+    if (expandLength <= HashMap.occupied) {
       this.bucketSize *= 2;
     }
   }
@@ -35,19 +36,20 @@ class HashMap {
   set(key, value = key) {
     this.expand(); // Expand the hashMap if the estimated length is passed
     let index = hash(key, this.bucketSize);
-    if (this.isBucketEmpty) {
+    if (this.isBucketEmpty(index)) {
       this.buckets[index] = new Node(key, value);
       HashMap.occupied += 1;
     } else {
-      let keyInBucket = Helper.takeKey(this.buckets[index]);
+      let bucket = this.buckets[index];
+      let keyInBucket = Helper.takeKey(bucket);
       if (key == keyInBucket) {
         // If key in bucket is equal to given key then change the value
         this.buckets[index][key] = value;
       } else {
-        while (bucket !== null) {
+        while (bucket.next !== null) {
           bucket = bucket.next;
         }
-        bucket = new Node(key, value); // If Not follow the head and make a linked list
+        bucket.next = new Node(key, value); // If Not follow the head and make a linked list
       }
     }
   }
