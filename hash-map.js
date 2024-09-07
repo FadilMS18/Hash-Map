@@ -52,62 +52,110 @@ class HashMap {
     }
   }
 
-  get(key){
-    let hashCode = hash(key, this.bucketSize)
-    let bucket = this.buckets[hashCode]
-    if(!bucket) return null // If bucket is empty then return null
-    else if(Helper.takeKey(bucket) == key) return bucket[key]; // If head key is equal to then return value
-    else{
-        while(bucket !== null){
-            bucket = bucket.next
-            if(Helper.takeKey(bucket) == key ) return bucket[key]
-        }
+  get(key) {
+    let hashCode = hash(key, this.bucketSize);
+    let bucket = this.buckets[hashCode];
+    if (!bucket) return null; // If bucket is empty then return null
+    else if (Helper.takeKey(bucket) == key)
+      return bucket[key]; // If head key is equal to then return value
+    else {
+      while (bucket !== null) {
+        bucket = bucket.next;
+        if (Helper.takeKey(bucket) == key) return bucket[key];
+      }
     }
-    return null
+    return null;
   }
 
-  has(key){
-    let hashCode = hash(key, this.bucketSize)
-    let bucket = this.buckets[hashCode]
-    if(!bucket) return false;
-    else if(Helper.takeKey(bucket) == key) return true
-    else{
-        while(bucket !== null ){
-            bucket = bucket.next
-            if(Helper.takeKey(bucket) == key) return true
-        }
+  has(key) {
+    let hashCode = hash(key, this.bucketSize);
+    let bucket = this.buckets[hashCode];
+    if (!bucket) return false;
+    else if (Helper.takeKey(bucket) == key) return true;
+    else {
+      while (bucket !== null) {
+        bucket = bucket.next;
+        if (Helper.takeKey(bucket) == key) return true;
+      }
     }
-    return false
+    return false;
   }
 
-  remove(key){
-    let hashCode = hash(key, this.bucketSize)
-    let bucket = this.buckets[hashCode]
-    if(!bucket) return false
-    else if(Helper.takeKey(bucket) == key){
-        this.buckets[hashCode] = bucket.next
-    }else{
-        while(bucket.next !== null){
-            if(Helper.takeKey(bucket.next) == key){
-                bucket.next = bucket.next.next
-            return true
-            }
-                bucket = bucket.next
+  remove(key) {
+    let hashCode = hash(key, this.bucketSize);
+    let bucket = this.buckets[hashCode];
+    if (!bucket) return false;
+    else if (Helper.takeKey(bucket) == key) {
+      this.buckets[hashCode] = bucket.next;
+    } else {
+      while (bucket.next !== null) {
+        if (Helper.takeKey(bucket.next) == key) {
+          bucket.next = bucket.next.next;
+          return true;
         }
+        bucket = bucket.next;
+      }
     }
-    return false
+    return false;
   }
 
-  length(){
-    let total = 0
-    this.buckets.forEach((bucket)=>{
-        if(typeof(bucket) == 'object'){
-            while(bucket !== null){
-                total += 1
-                bucket = bucket.next
-            }
+  length() {
+    let total = 0;
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket == "object") {
+        while (bucket !== null) {
+          total += 1;
+          bucket = bucket.next;
         }
-    })
-    return total
+      }
+    });
+    return total;
+  }
+
+  clear() {
+    this.buckets = new Array(16);
+  }
+
+  keys() {
+    let arr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket == "object") {
+        while (bucket !== null) {
+          arr.push[Helper.takeKey(bucket)];
+          bucket = bucket.next;
+        }
+      }
+    });
+    return arr;
+  }
+
+  values() {
+    let arr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket == "object") {
+        while (bucket !== null) {
+          arr.push(bucket[Helper.takeKey(bucket)]);
+          bucket = bucket.next;
+        }
+      }
+    });
+    return arr;
+  }
+
+  entries() {
+    let arr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket == "object") {
+        while (bucket !== null) {
+          arr.push(
+            `${Helper.takeKey(bucket)}: ${bucket[Helper.takeKey(bucket)]}`
+          );
+          bucket = bucket.next;
+        }
+      }
+    });
+    return arr;
   }
 }
+
+export { HashMap };
