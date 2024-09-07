@@ -79,4 +79,35 @@ class HashMap {
     }
     return false
   }
+
+  remove(key){
+    let hashCode = hash(key, this.bucketSize)
+    let bucket = this.buckets[hashCode]
+    if(!bucket) return false
+    else if(Helper.takeKey(bucket) == key){
+        this.buckets[hashCode] = bucket.next
+    }else{
+        while(bucket.next !== null){
+            if(Helper.takeKey(bucket.next) == key){
+                bucket.next = bucket.next.next
+            return true
+            }
+                bucket = bucket.next
+        }
+    }
+    return false
+  }
+
+  length(){
+    let total = 0
+    this.buckets.forEach((bucket)=>{
+        if(typeof(bucket) == 'object'){
+            while(bucket !== null){
+                total += 1
+                bucket = bucket.next
+            }
+        }
+    })
+    return total
+  }
 }
